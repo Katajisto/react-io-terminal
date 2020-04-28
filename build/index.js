@@ -87,11 +87,9 @@ options.singleton = false;
 
 var update = api(content, options);
 
-var exported = content.locals ? content.locals : {};
 
 
-
-module.exports = exported;
+module.exports = content.locals || {};
 
 /***/ }),
 /* 1 */
@@ -121,6 +119,8 @@ __webpack_require__(0);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Terminal = function Terminal(props) {
+  //Component state
+
   var _useState = (0, _react.useState)(""),
       _useState2 = _slicedToArray(_useState, 2),
       inputValue = _useState2[0],
@@ -136,63 +136,120 @@ var Terminal = function Terminal(props) {
       newID = _useState6[0],
       setNewID = _useState6[1];
 
-  var getId = function getId() {
+  //Load config for component
+
+  var config = props.Config || {};
+
+  var conf = {
+    prefix: config.prefix || ">",
+    userOutPrefix: config.userOutPrefix || "< ",
+    callbackOutPrefix: config.handlerOutPrefix || "[callback]",
+    callback: config.handler || function () {
+      return "OK";
+    },
+    textColor: config.textColor || "lightgreen",
+    background: config.background || "black",
+    font: config.font || "monospace",
+    fontSize: config.fontSize || "1em",
+    getFocusOnRender: config.getFocusOnRender || false
+  };
+
+  /* Function for getting a new id every time.
+   *
+   * Addition parameter allows you to get multiple ids.
+   * Just call getID() once, with the amount of ids you
+   * are going to need, and do id+n.
+   */
+
+  var getID = function getID(addition) {
     var tempID = newID;
-    setNewID(newID + 1);
+    //Plus operator
+    setNewID(newID + addition);
     return tempID;
   };
 
   var addLines = function addLines(linesToAdd) {
-    console.log(linesToAdd);
-    setLines(lines.concat(linesToAdd));
+    if (Array.isArray(linesToAdd)) {
+      var baseID = getID(linesToAdd.length);
+      var objArr = [];
+      for (var i = 0; i < linesToAdd.length; i++) {
+        objArr.push({ content: String(linesToAdd[i]), id: baseID + i });
+      }
+      setLines(lines.concat(objArr));
+    } else {
+      setLines(lines.concat({ content: String(linesToAdd), id: getID(1) }));
+    }
   };
 
   var handleInput = function handleInput(e) {
     setInputValue(e.target.value);
   };
 
-  //If the input field is no longer in focus, make it focused.
-  var handleInputBlur = function handleInputBlur() {
-    document.getElementById("lineInput").focus();
-  };
-
   var handleKeypress = function handleKeypress(e) {
     if (e.keyCode == 13) {
       if (inputValue === "") return;
-      var newLine = { content: "< " + inputValue, id: getId() };
-      var rawInput = inputValue;
+      var lineArr1 = ["" + conf.userOutPrefix + inputValue];
+      addLines(lineArr1.concat("" + conf.callbackOutPrefix + conf.callback(inputValue)));
       setInputValue("");
-      addLines([newLine, { content: props.Handler(rawInput), id: getId() }]);
     }
   };
 
   (0, _react.useEffect)(function () {
-    document.getElementById("lineInput").focus();
+    if (conf.getFocusOnRender) document.getElementById("lineInput").focus();
   });
 
   var lineList = lines.map(function (x) {
     return _react2.default.createElement(
-      'li',
-      { className: 'terminalLine', key: x.id },
+      "li",
+      { style: { color: conf.textColor }, className: "terminalLine", key: x.id },
       x.content
     );
   });
 
+  var handleClick = function handleClick(e) {
+    document.getElementById("lineInput").focus();
+  };
+
   return _react2.default.createElement(
-    'div',
-    { className: 'terminal-container' },
+    "div",
+    {
+      className: "terminal-container",
+      style: {
+        background: conf.background,
+        fontFamily: conf.font,
+        fontSize: conf.fontSize
+      },
+      onClick: handleClick
+    },
     _react2.default.createElement(
-      'div',
-      { className: 'content-container' },
+      "div",
+      {
+        style: { background: conf.background },
+        className: "content-container"
+      },
       _react2.default.createElement(
-        'ul',
-        null,
+        "ul",
+        { style: { color: conf.textColor } },
         lineList,
         _react2.default.createElement(
-          'li',
-          { id: -1, className: 'inputLineContainer' },
-          '~$',
-          _react2.default.createElement('input', { spellCheck: 'false', autoComplete: 'off', id: 'lineInput', value: inputValue, onKeyDown: handleKeypress, type: 'text', className: 'inputLineInput', onBlur: handleInputBlur, onChange: handleInput })
+          "li",
+          {
+            style: { color: conf.textColor },
+            id: -1,
+            className: "inputLineContainer"
+          },
+          conf.prefix,
+          _react2.default.createElement("input", {
+            style: { color: conf.textColor },
+            spellCheck: "false",
+            autoComplete: "off",
+            id: "lineInput",
+            value: inputValue,
+            onKeyDown: handleKeypress,
+            type: "text",
+            className: "inputLineInput",
+            onChange: handleInput
+          })
         )
       )
     )
@@ -208,9 +265,8 @@ exports.default = Terminal;
 // Imports
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(4);
 exports = ___CSS_LOADER_API_IMPORT___(false);
-exports.push([module.i, "@import url(https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap);"]);
 // Module
-exports.push([module.i, "* {\n    box-sizing: border-box;\n  }\n\n.inputLineContainer {\n    color: green;\n    font-weight: bold;\n    font-family: 'IBM Plex Mono', monospace;\n    font-size: 25px;\n    color: green;\n    display: flex;\n    justify-content: space-around;\n    align-items: center;\n}\n\n.inputLineInput {\n    width: 100%;\n    background: none;\n    padding-left: 3px;\n    border: none;\n    color: inherit;\n    font-size: inherit;\n    font-family: inherit;\n    font-weight: inherit;\n}\n\n.inputLineInput:focus {\n    outline: none;\n}\n\n.terminalLine {\n    color: green;\n    font-weight: bold;\n    font-family: 'IBM Plex Mono', monospace;\n    font-size: 25px;\n}\n\n.content-container {\n    position: absolute;\n    bottom: 15px;\n    left: 10px;\n}\n\n.terminal-container {\n    height: vh;\n    padding: 30px;\n    overflow: hidden;\n    white-space: nowrap;\n}\n\nul {\n    margin: 0px;\n    padding: 0px;\n}", ""]);
+exports.push([module.i, "* {\n  box-sizing: border-box;\n}\n\n.inputLineContainer {\n  color: white;\n  font-weight: bold;\n  display: flex;\n  justify-content: space-around;\n  align-items: center;\n  width: 100%;\n}\n\n.inputLineInput {\n  width: 100%;\n  padding-left: 3px;\n  border: none;\n  color: inherit;\n  font-size: inherit;\n  font-family: inherit;\n  background: none;\n  font-weight: inherit;\n}\n\n.inputLineInput:focus {\n  outline: none;\n}\n\n.terminalLine {\n  color: white;\n  font-weight: bold;\n}\n\n.content-container {\n  padding: 0px;\n  position: absolute;\n  bottom: 10px;\n  left: 10px;\n  width: 98%;\n}\n\n.terminal-container {\n  height: 100%;\n  width: 100%;\n  overflow: hidden;\n  white-space: nowrap;\n  position: relative;\n}\n\nul {\n  list-style-type: none;\n  margin: 0px;\n  padding: 0px;\n  width: 100%;\n}\n", ""]);
 // Exports
 module.exports = exports;
 

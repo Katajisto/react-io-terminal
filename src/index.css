@@ -1,56 +1,55 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
-
 * {
-    box-sizing: border-box;
-  }
+  box-sizing: border-box;
+}
 
 .inputLineContainer {
-    color: green;
-    font-weight: bold;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 25px;
-    color: green;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
 }
 
 .inputLineInput {
-    width: 100%;
-    background: none;
-    padding-left: 3px;
-    border: none;
-    color: inherit;
-    font-size: inherit;
-    font-family: inherit;
-    font-weight: inherit;
+  width: 100%;
+  padding-left: 3px;
+  border: none;
+  color: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  background: none;
+  font-weight: inherit;
 }
 
 .inputLineInput:focus {
-    outline: none;
+  outline: none;
 }
 
 .terminalLine {
-    color: green;
-    font-weight: bold;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 25px;
+  color: white;
+  font-weight: bold;
 }
 
 .content-container {
-    position: absolute;
-    bottom: 15px;
-    left: 10px;
+  padding: 0px;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 98%;
 }
 
 .terminal-container {
-    height: vh;
-    padding: 30px;
-    overflow: hidden;
-    white-space: nowrap;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
 }
 
 ul {
-    margin: 0px;
-    padding: 0px;
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
 }

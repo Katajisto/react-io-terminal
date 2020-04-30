@@ -1,6 +1,6 @@
 {
   "name": "react-io-terminal",
-  "version": "1.4.0",
+  "version": "1.4.5",
   "description": "A React terminal component. Displays a terminal to the user on the web page and lets you hook into it.",
   "license": "MIT",
   "main": "build/index.js",

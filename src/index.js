@@ -21,8 +21,8 @@ const Terminal = (props) => {
       (() => {
         return "OK";
       }),
-    textColor: config.textColor || "lightgreen",
-    background: config.background || "black",
+    textColor: config.textColor || "white",
+    background: config.background || "blue",
     font: config.font || "monospace",
     fontSize: config.fontSize || "1em",
     getFocusOnRender: config.getFocusOnRender || false,
@@ -62,10 +62,15 @@ const Terminal = (props) => {
   const handleKeypress = (e) => {
     if (e.keyCode == 13) {
       if (inputValue === "") return;
-      const lineArr1 = [`${conf.userOutPrefix}${inputValue}`];
-      addLines(
-        lineArr1.concat(`${conf.callbackOutPrefix}${conf.callback(inputValue)}`)
-      );
+      let lineArr = [`${conf.userOutPrefix}${inputValue}`];
+      const callbackResponse = conf.callback(inputValue);
+      let line;
+      for (line in callbackResponse) {
+        lineArr = lineArr.concat(
+          `${conf.callbackOutPrefix}${String(callbackResponse[line])}`
+        );
+      }
+      addLines(lineArr);
       setInputValue("");
     }
   };

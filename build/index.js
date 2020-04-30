@@ -147,8 +147,8 @@ var Terminal = function Terminal(props) {
     callback: config.handler || function () {
       return "OK";
     },
-    textColor: config.textColor || "lightgreen",
-    background: config.background || "black",
+    textColor: config.textColor || "white",
+    background: config.background || "blue",
     font: config.font || "monospace",
     fontSize: config.fontSize || "1em",
     getFocusOnRender: config.getFocusOnRender || false
@@ -188,8 +188,13 @@ var Terminal = function Terminal(props) {
   var handleKeypress = function handleKeypress(e) {
     if (e.keyCode == 13) {
       if (inputValue === "") return;
-      var lineArr1 = ["" + conf.userOutPrefix + inputValue];
-      addLines(lineArr1.concat("" + conf.callbackOutPrefix + conf.callback(inputValue)));
+      var lineArr = ["" + conf.userOutPrefix + inputValue];
+      var callbackResponse = conf.callback(inputValue);
+      var line = void 0;
+      for (line in callbackResponse) {
+        lineArr = lineArr.concat("" + conf.callbackOutPrefix + String(callbackResponse[line]));
+      }
+      addLines(lineArr);
       setInputValue("");
     }
   };

@@ -65,9 +65,15 @@ const Terminal = (props) => {
       let lineArr = [`${conf.userOutPrefix}${inputValue}`];
       const callbackResponse = conf.callback(inputValue);
       let line;
-      for (line in callbackResponse) {
+      if (Array.isArray(callbackResponse)) {
+        for (line in callbackResponse) {
+          lineArr = lineArr.concat(
+            `${conf.callbackOutPrefix}${String(callbackResponse[line])}`
+          );
+        }
+      } else {
         lineArr = lineArr.concat(
-          `${conf.callbackOutPrefix}${String(callbackResponse[line])}`
+          `${conf.callbackOutPrefix}${String(callbackResponse)}`
         );
       }
       addLines(lineArr);

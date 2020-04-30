@@ -1,6 +1,6 @@
 # React-io-terminal
 
-This is a simple terminal component that you can embed into your site. It is meant to function very simply. You give it visual configuration options as props, as well as a handler function. This handler gets the raw user input as a parameter and can return a string, or an array of strings. The returned strings are the lines printed as a response to the user input.
+This is a simple terminal component that you can embed into your site. It is meant to function very simply. You give it visual configuration options as props, as well as a handler function. This handler gets the raw user input as a parameter and can return an array of strings (even one string). The returned strings are the lines printed as a response to the user input.
 
 ## Installation
 
